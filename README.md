@@ -1,2 +1,3 @@
-# lotgd
-Legend of the Gray Dragon (Text RPG)
+# Край Сірого Дракона
+Текстова рольова онлайнова гра.
+
