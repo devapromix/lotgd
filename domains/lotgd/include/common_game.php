@@ -40,21 +40,21 @@ function hasproperties($properties, $f) {
 
 function characterbox($u){
 	$p = '';
+	if (!$u['is_guest'])
+		$p .= '<h2><span>Персонаж</span></h2>';
+	$p .= '<div class="box">';
+	$p .= '<div class="inbox">';
+	$p .= '<ul>';
+	$p .= '<li><p><b>'.$u['charname'].'</b></p></li>';
+	$p .= '<li><p>'.characterracename($u).' '.characterclassname($u).' '.$u['charlevel'].' уровня</p></li>';
 	if (!$u['is_guest']) {
-		$p .= '<h2><span>'.$u['charname'].'</span></h2>';
-		$p .= '<div class="box">';
-		$p .= '<div class="inbox">';
-		$p .= '<ul>';
-		$p .= '<li><p>'.characterracename($u).' '.characterclassname($u).' '.$u['charlevel'].' уровня</p></li>';
 		$p .= '<li><p>Опыт '.$u['charexp'].'/'.charactermaxexp($u['charlevel']).'</p></li>';
 		$p .= "<li><p>Здоровье ".$u['charhp'].'/'.$u['charmaxhp']."</p></li>";
 		$p .= "<li><p>Золото ".$u['chargold']."</p></li>";
-		$p .= '</ul>';
-		$p .= '</div>';
-		$p .= '</div>';
-	} else {
-		
 	}
+	$p .= '</ul>';
+	$p .= '</div>';
+	$p .= '</div>';
 	return $p;
 }
 

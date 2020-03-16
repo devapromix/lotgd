@@ -186,6 +186,38 @@ ob_start();
 </div>
 <div id="column-2">
 
+	<?php if ($pun_user['is_guest']) { ?>
+	<div class="blockform">
+		<h2><span>Здравствуй, путник!"</span></h2>
+		<div class="box">
+			<div class="inform">
+				<fieldset>
+					<legend>Добро пожаловать в "Край Серого Дракона!</legend>
+					<div class="infldset">
+						<p>Земли Эльвиона полны тайн, интриг, алчности и правосудия! Здесь каждый смельчак может стать героем, сыскав славу в сражениях и подвигах! Древние подземелья, сотни врагов, несметные сокровища - все это, и даже больше, можно встретить, исследуя этот таинственный мир.</p>
+						<p>Готов ли ты стать героем и увековечить свое имя на гранитной плите Зала Славы? Выбор за тобой...</p>
+						<ul>
+							<li><a href="register.php"><h2>Регистрация</h2></a></li>
+							<li><a href="login.php"><h2>Вход</h2></a></li>
+						</ul>
+					</div>
+				</fieldset>
+			</div>
+			<div class="inform">
+				<fieldset>
+					<legend>Последние события в Эльвионе</legend>
+					<div class="infldset">
+						<ul>
+							<li>1</li>
+							<li>2</li>
+							<li>3</li>
+						</ul>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+	<?php } else {?>
 	<div class="blockform">
 		<h2><span><?php echo pun_htmlspecialchars($cur_loc['name']); ?></span></h2>
 		<div class="box">
@@ -215,11 +247,37 @@ ob_start();
 		</div>
 	</div>
 	<?php } ?>
+	<?php } ?>
 	
 </div>
 <div id="column-3">
 	<div class="blockmenu">
-		<?php echo characterbox($pun_user); ?>
+		<?php
+		if (!$pun_user['is_guest']) {
+			echo characterbox($pun_user);
+		} else {
+			echo '<h2><span>Зал Славы</span></h2>';
+			$topchars = $db->query('SELECT charname,charexp FROM '.$db->prefix.'users  order by charexp desc limit 7') or error('Unable to fetch users list', __FILE__, __LINE__, $db->error());
+			$p = "";
+			$n = 0;
+			$p .= '<div class="box">';
+			$p .= '<div class="inbox">';
+			$p .= '<ul>';
+			while ($curchar = mysqli_fetch_array($topchars)) {
+				$n++;
+				$p .= '<li><p><b>'.$n.'. '.$curchar['charname'].'</b></p></li>';
+			}
+			$p .= '</ul>';
+			$p .= '</div>';
+			$p .= '</div>';
+			echo $p;
+			echo '<h2><span>Случайный Герой</span></h2>';
+			$result = $db->query('SELECT charname,charrace,charclass,charlevel FROM '.$db->prefix.'users  order by rand() limit 1') or error('Unable to fetch users list', __FILE__, __LINE__, $db->error());
+			$r = mysqli_fetch_array($result);
+			$r['is_guest'] = true;
+			echo characterbox($r);
+		}
+		?>
 	</div>
 </div>
 
