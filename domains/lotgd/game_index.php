@@ -11,7 +11,7 @@ require PUN_ROOT.'header.php';
 
 $x = $pun_user['charx'];
 $y = $pun_user['chary'];
-$result = $db->query('SELECT name, legend, text, properties FROM '.$db->prefix.'locations WHERE x='.$x.' AND y='.$y) or error('Unable to fetch locations list', __FILE__, __LINE__, $db->error());
+$result = $db->query('SELECT name, legend, text, properties FROM '.$db->prefix.'locations WHERE x='.$x.' AND y='.$y) or error('EN:2730168344', __FILE__, __LINE__, $db->error());
 //$num_locs = $db->num_rows($result);
 
 //for ($i = 0; $i < $num_locs; ++$i)
@@ -21,16 +21,16 @@ $cur_loc = $db->fetch_assoc($result);
 
 ////////
 
-$west = $db->query('SELECT name, legend, text FROM '.$db->prefix.'locations WHERE x='.($x-1).' AND y='.$y) or error('Unable to fetch locations list', __FILE__, __LINE__, $db->error());
+$west = $db->query('SELECT name, legend, text FROM '.$db->prefix.'locations WHERE x='.($x-1).' AND y='.$y) or error('EN:4588902356', __FILE__, __LINE__, $db->error());
 $west_loc = $db->fetch_assoc($west);
 
-$east = $db->query('SELECT name, legend, text FROM '.$db->prefix.'locations WHERE x='.($x+1).' AND y='.$y) or error('Unable to fetch locations list', __FILE__, __LINE__, $db->error());
+$east = $db->query('SELECT name, legend, text FROM '.$db->prefix.'locations WHERE x='.($x+1).' AND y='.$y) or error('EN:3017485479', __FILE__, __LINE__, $db->error());
 $east_loc = $db->fetch_assoc($east);
 
-$north = $db->query('SELECT name, legend, text FROM '.$db->prefix.'locations WHERE x='.$x.' AND y='.($y-1)) or error('Unable to fetch locations list', __FILE__, __LINE__, $db->error());
+$north = $db->query('SELECT name, legend, text FROM '.$db->prefix.'locations WHERE x='.$x.' AND y='.($y-1)) or error('EN:2281057941', __FILE__, __LINE__, $db->error());
 $north_loc = $db->fetch_assoc($north);
 
-$south = $db->query('SELECT name, legend, text FROM '.$db->prefix.'locations WHERE x='.$x.' AND y='.($y+1)) or error('Unable to fetch locations list', __FILE__, __LINE__, $db->error());
+$south = $db->query('SELECT name, legend, text FROM '.$db->prefix.'locations WHERE x='.$x.' AND y='.($y+1)) or error('EN:3337926577', __FILE__, __LINE__, $db->error());
 $south_loc = $db->fetch_assoc($south);
 
 function hashp() {
@@ -41,25 +41,25 @@ function hashp() {
 $dir = isset($_GET['dir']) ? $_GET['dir'] : null;
 
 if (($dir == 'west') && ($west_loc['name'] != '') && hashp()) {
-	$db->query('UPDATE '.$db->prefix.'users SET charx='.($x-1).' WHERE id='.$pun_user['id']) or error('Unable to change user group', __FILE__, __LINE__, $db->error());
+	$db->query('UPDATE '.$db->prefix.'users SET charx='.($x-1).' WHERE id='.$pun_user['id']) or error('EN:3263826781', __FILE__, __LINE__, $db->error());
 	header('Location: game_index.php');
 	exit();
 }
 
 if (($dir == 'east') && ($east_loc['name'] != '') && hashp()) {
-	$db->query('UPDATE '.$db->prefix.'users SET charx='.($x+1).' WHERE id='.$pun_user['id']) or error('Unable to change user group', __FILE__, __LINE__, $db->error());
+	$db->query('UPDATE '.$db->prefix.'users SET charx='.($x+1).' WHERE id='.$pun_user['id']) or error('EN:4483267890', __FILE__, __LINE__, $db->error());
 	header('Location: game_index.php');
 	exit();
 }
 
 if (($dir == 'north') && ($north_loc['name'] != '') && hashp()) {
-	$db->query('UPDATE '.$db->prefix.'users SET chary='.($y-1).' WHERE id='.$pun_user['id']) or error('Unable to change user group', __FILE__, __LINE__, $db->error());
+	$db->query('UPDATE '.$db->prefix.'users SET chary='.($y-1).' WHERE id='.$pun_user['id']) or error('EN:1890437890', __FILE__, __LINE__, $db->error());
 	header('Location: game_index.php');
 	exit();
 }
 
 if (($dir == 'south') && ($south_loc['name'] != '') && hashp()) {
-	$db->query('UPDATE '.$db->prefix.'users SET chary='.($y+1).' WHERE id='.$pun_user['id']) or error('Unable to change user group', __FILE__, __LINE__, $db->error());
+	$db->query('UPDATE '.$db->prefix.'users SET chary='.($y+1).' WHERE id='.$pun_user['id']) or error('EN:3485267811', __FILE__, __LINE__, $db->error());
 	header('Location: game_index.php');
 	exit();
 }
@@ -78,7 +78,7 @@ function hasfight() {
 
 if (($dir == 'heal') && (hasheal()) && (hashp())) {
 	if ($healhp > 0) {
-		$db->query('UPDATE '.$db->prefix.'users SET charhp='.($pun_user['charmaxhp']).',chargold='.($pun_user['chargold'] - ($healhp*2)).' WHERE id='.$pun_user['id']) or error('Unable to change user group', __FILE__, __LINE__, $db->error());
+		$db->query('UPDATE '.$db->prefix.'users SET charhp='.($pun_user['charmaxhp']).',chargold='.($pun_user['chargold'] - ($healhp*2)).' WHERE id='.$pun_user['id']) or error('EN:4181567392', __FILE__, __LINE__, $db->error());
 	}
 	header('Location: game_index.php');
 	exit();
@@ -88,7 +88,7 @@ if (($dir == 'revive') && (!hashp())) {
 	$pun_user['charhp'] = $pun_user['charmaxhp'];
 	$pun_user['charx'] = 0;
 	$pun_user['chary'] = 0;
-	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charx='.$pun_user['charx'].',chary='.$pun_user['chary'].' WHERE id='.$pun_user['id']) or error('Unable to change user group', __FILE__, __LINE__, $db->error());	
+	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charx='.$pun_user['charx'].',chary='.$pun_user['chary'].' WHERE id='.$pun_user['id']) or error('EN:5178453451', __FILE__, __LINE__, $db->error());	
 	redirect('game_index.php', 'Ты был воскрешен!');
 }
 
@@ -111,7 +111,7 @@ if (($dir == 'fight') && (hasfight()) && hashp()) {
 		$pun_user['chargold'] = $pun_user['chargold'] + $gold;
 	}
 	
-	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',chargold='.$pun_user['chargold'].' WHERE id='.$pun_user['id']) or error('Unable to change user group', __FILE__, __LINE__, $db->error());	
+	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',chargold='.$pun_user['chargold'].' WHERE id='.$pun_user['id']) or error('EN:2390144337', __FILE__, __LINE__, $db->error());	
 }
 
 
@@ -197,8 +197,8 @@ ob_start();
 						<p>Земли Эльвиона полны тайн, интриг, алчности и правосудия! Здесь каждый смельчак может стать героем, сыскав славу в сражениях и подвигах! Древние подземелья, сотни врагов, несметные сокровища - все это, и даже больше, можно встретить, исследуя этот таинственный мир.</p>
 						<p>Готов ли ты стать героем и увековечить свое имя на гранитной плите Зала Славы? Выбор за тобой...</p>
 						<ul>
-							<li><a href="register.php"><h2>Регистрация</h2></a></li>
-							<li><a href="login.php"><h2>Вход</h2></a></li>
+							<li><h2>→ <a href="register.php">Регистрация</a></h2></li>
+							<li><h2>→ <a href="login.php">Вход</a></h2></li>
 						</ul>
 					</div>
 				</fieldset>
@@ -208,9 +208,14 @@ ob_start();
 					<legend>Последние события в Эльвионе</legend>
 					<div class="infldset">
 						<ul>
-							<li>1</li>
-							<li>2</li>
-							<li>3</li>
+						<?php
+							$p = '';
+							$msgs = $db->query('SELECT * FROM '.$db->prefix.'recent_incidents') or error('EN:3481045687', __FILE__, __LINE__, $db->error());
+							while ($msg = mysqli_fetch_array($msgs)) {
+								$p .= '<li><p>'.$msg['message'].'</p></li>';
+							}
+							echo $p;
+						?>
 						</ul>
 					</div>
 				</fieldset>
@@ -257,7 +262,7 @@ ob_start();
 			echo characterbox($pun_user);
 		} else {
 			echo '<h2><span>Зал Славы</span></h2>';
-			$topchars = $db->query('SELECT charname,charexp FROM '.$db->prefix.'users  order by charexp desc limit 7') or error('Unable to fetch users list', __FILE__, __LINE__, $db->error());
+			$topchars = $db->query('SELECT charname,charexp FROM '.$db->prefix.'users  order by charexp desc limit 7') or error('EN:3122763926', __FILE__, __LINE__, $db->error());
 			$p = "";
 			$n = 0;
 			$p .= '<div class="box">';
@@ -272,7 +277,7 @@ ob_start();
 			$p .= '</div>';
 			echo $p;
 			echo '<h2><span>Случайный Герой</span></h2>';
-			$result = $db->query('SELECT charname,charrace,charclass,charlevel FROM '.$db->prefix.'users  order by rand() limit 1') or error('Unable to fetch users list', __FILE__, __LINE__, $db->error());
+			$result = $db->query('SELECT charname,charrace,charclass,charlevel FROM '.$db->prefix.'users  order by rand() limit 1') or error('EN:4714503458', __FILE__, __LINE__, $db->error());
 			$r = mysqli_fetch_array($result);
 			$r['is_guest'] = true;
 			echo characterbox($r);
