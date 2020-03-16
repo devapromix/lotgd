@@ -1,7 +1,13 @@
 <?php
 
 function enemyname(){
-	return 'Ворог';
+	$p = '';
+	$p .= 'Кричащий Бегун<br/>';
+	$p .= '<small>';
+	$p .= 'Птица 1 уровня<br/>';
+	$p .= '♥ Здоровье 255';
+	$p .= '</small>';
+	return $p;
 }
 
 function charactermaxexp($l){
@@ -11,7 +17,7 @@ function charactermaxexp($l){
 function characterracename($u) {
 	$raceid = $u['charrace'];
 	if ($raceid == 0)
-		return 'Ельф';
+		return 'Эльф';
 	else
 		return '?';
 }
@@ -19,7 +25,7 @@ function characterracename($u) {
 function characterclassname($u) {
 	$classid = $u['charclass'];
 	if ($classid == 0)
-		return 'Воїн';
+		return 'Воин';
 	else
 		return '?';
 }
@@ -39,9 +45,9 @@ function characterbox($u){
 		$p .= '<div class="box">';
 		$p .= '<div class="inbox">';
 		$p .= '<ul>';
-		$p .= '<li><p>'.characterracename($u).' '.characterclassname($u).' '.$u['charlevel'].' рівня</p></li>';
-		$p .= '<li><p>Досвід '.$u['charexp'].'/'.charactermaxexp($u['charlevel']).'</p></li>';
-		$p .= "<li><p>Здоров'я ".$u['charhp'].'/'.$u['charmaxhp']."</p></li>";
+		$p .= '<li><p>'.characterracename($u).' '.characterclassname($u).' '.$u['charlevel'].' уровня</p></li>';
+		$p .= '<li><p>Опыт '.$u['charexp'].'/'.charactermaxexp($u['charlevel']).'</p></li>';
+		$p .= "<li><p>Здоровье ".$u['charhp'].'/'.$u['charmaxhp']."</p></li>";
 		$p .= "<li><p>Золото ".$u['chargold']."</p></li>";
 		$p .= '</ul>';
 		$p .= '</div>';
