@@ -3,6 +3,7 @@
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/common_game.php';
+require PUN_ROOT.'include/common_game_admin.php';
 
 $page_title = 'Край Серого Дракона';
 define('PUN_ALLOW_INDEX', 1);
@@ -180,7 +181,11 @@ ob_start();
 				</ul>
 			</div>
 		</div>
-		<?php }; ?>
+		<?php }; 
+		if ($pun_user['is_admmod']) {
+			generate_game_admin_menu();
+		}
+		?>
 		
 	</div>
 </div>
