@@ -54,6 +54,7 @@ function characterbox($u){
 	if (!$u['is_guest']) {
 		$p .= '<li><p>Опыт '.$u['charexp'].'/'.charactermaxexp($u['charlevel']).'</p></li>';
 		$p .= "<li><p>Здоровье ".$u['charhp'].'/'.$u['charmaxhp']."</p></li>";
+		$p .= "<li><p>Провизия ".$u['charfood']."</p></li>";
 		$p .= "<li><p>Золото ".$u['chargold']."</p></li>";
 	}
 	$p .= '</ul>';
