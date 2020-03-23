@@ -14,8 +14,8 @@ function enemyname(){
 	return $p;
 }
 
-function charactermaxexp($l){
-	return $l * 250;
+function charactermaxexp($level){
+	return $level * 250;
 }
 
 function characterracename($u) {
@@ -60,6 +60,10 @@ function characterbox($u){
 	$p .= '</div>';
 	$p .= '</div>';
 	return $p;
+}
+
+function percent($allvalue, $percent){
+	return floor(($allvalue * $percent) / 100);
 }
 
 ?>

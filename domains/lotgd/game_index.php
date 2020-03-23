@@ -69,7 +69,7 @@ $healhp = $pun_user['charmaxhp'] - $pun_user['charhp'];
 
 function hasheal() {
 	global $healhp, $cur_loc, $pun_user;
-	return (hasproperties($cur_loc['properties'], '+') && ($healhp > 0) && ($pun_user['chargold'] >= ($healhp*2)));
+	return (hasproperties($cur_loc['properties'], '+') && ($healhp > 0) && ($pun_user['chargold'] >= $healhp));
 }
 
 function hasfight() {
@@ -79,14 +79,14 @@ function hasfight() {
 
 if (($dir == 'heal') && (hasheal()) && (hashp())) {
 	if ($healhp > 0) {
-		$db->query('UPDATE '.$db->prefix.'users SET charhp='.($pun_user['charmaxhp']).',chargold='.($pun_user['chargold'] - ($healhp*2)).' WHERE id='.$pun_user['id']) or error('EN:4181567392', __FILE__, __LINE__, $db->error());
+		$db->query('UPDATE '.$db->prefix.'users SET charhp='.($pun_user['charmaxhp']).',chargold='.($pun_user['chargold'] - $healhp).' WHERE id='.$pun_user['id']) or error('EN:4181567392', __FILE__, __LINE__, $db->error());
 	}
 	header('Location: game_index.php');
 	exit();
 }
 
 if (($dir == 'revive') && (!hashp())) {
-	$pun_user['charhp'] = $pun_user['charmaxhp'];
+	$pun_user['charhp'] = percent($pun_user['charmaxhp'], 80);
 	$pun_user['charx'] = 0;
 	$pun_user['chary'] = 0;
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charx='.$pun_user['charx'].',chary='.$pun_user['chary'].' WHERE id='.$pun_user['id']) or error('EN:5178453451', __FILE__, __LINE__, $db->error());	
@@ -96,23 +96,28 @@ if (($dir == 'revive') && (!hashp())) {
 $hasfight = '';
 if (($dir == 'fight') && (hasfight()) && hashp()) {
 	$hasfight = '';
-	$dam = 26;
+	$dam = 12;
 	$pun_user['charhp'] = $pun_user['charhp'] - $dam;
 	if ($pun_user['charhp'] <= 0) {
 		$hasfight .= 'Ты погиб!'.'<br/>';
 		$pun_user['charhp'] = 0;
-		if ($pun_user['chargold'] > 0) {
-			$pun_user['chargold'] = 0;
-			$hasfight .= 'Ты потерял все золото!'.'<br/>';
-		}
+		$gold = percent($pun_user['chargold'], 20);
+		$pun_user['chargold'] = $pun_user['chargold'] - $gold;
+		$hasfight .= 'Ты потерял золото!'.'<br/>';
+		$exp = percent($pun_user['charexp'], 10);
+		$pun_user['charexp'] = $pun_user['charexp'] - $exp;
+		$hasfight .= 'Ты потерял опыт!'.'<br/>';
 	} else {
 		$hasfight .= 'Ты победил!'.'<br/>';
 		$gold = rand(10, 20);
 		$hasfight .= 'Золото +'.$gold.'<br/>';	
 		$pun_user['chargold'] = $pun_user['chargold'] + $gold;
+		$exp = rand(15, 25);
+		$hasfight .= 'Опыт +'.$exp.'<br/>';	
+		$pun_user['charexp'] = $pun_user['charexp'] + $exp;
 	}
 	
-	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',chargold='.$pun_user['chargold'].' WHERE id='.$pun_user['id']) or error('EN:2390144337', __FILE__, __LINE__, $db->error());	
+	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',chargold='.$pun_user['chargold'].',charexp='.$pun_user['charexp'].' WHERE id='.$pun_user['id']) or error('EN:2390144337', __FILE__, __LINE__, $db->error());	
 }
 
 
@@ -166,7 +171,7 @@ ob_start();
 		<div class="box">
 			<div class="inbox">
 				<ul>
-					<li><a href="game_index.php?dir=heal"><?php echo ($healhp); ?> ♥ за <?php echo ($healhp * 2);?> зол.</a></li>
+					<li><a href="game_index.php?dir=heal"><?php echo ($healhp); ?> ♥ за <?php echo $healhp;?> зол.</a></li>
 				</ul>
 			</div>
 		</div>
