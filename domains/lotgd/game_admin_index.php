@@ -12,6 +12,7 @@ define('PUN_ADMIN_CONSOLE', 1);
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/common_admin.php';
+require PUN_ROOT.'include/common_game.php';
 
 
 if (!$pun_user['is_admmod'])
@@ -53,7 +54,7 @@ generate_admin_menu('index');
 				<dl>
 					<dt>Версия LotGD</dt>
 					<dd>
-						<b>v.0.0.1</b> - <a href="https://github.com/devapromix/lotgd">Проект на GitHub</a>
+						<b><?php echo gameversion(); ?></b> - <a target="_blank" href="https://github.com/devapromix/lotgd">Проект на GitHub</a>
 					</dd>
 				</dl>
 			</div>

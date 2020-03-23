@@ -1,5 +1,9 @@
 <?php
 
+function gameversion(){
+	return 'v.0.0.1';
+}
+
 function enemyname(){
 	$p = '';
 	$p .= 'Кричащий Бегун<br/>';
