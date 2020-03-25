@@ -77,6 +77,17 @@ function hasfight() {
 	return (hasproperties($cur_loc['properties'], 'F') && ($pun_user['charhp'] > 0));
 }
 
+function hasbuyfood() {
+	global $cur_loc, $pun_user;
+	return (hasproperties($cur_loc['properties'], 'I') && ($pun_user['charhp'] > 0) && ($pun_user['charfood'] < 10));
+}
+
+function hasrest() {
+	global $cur_loc, $pun_user;
+	return (hasfight() && ($pun_user['charfood'] > 0));
+}
+
+
 if (($dir == 'heal') && (hasheal()) && (hashp())) {
 	if ($healhp > 0) {
 		$db->query('UPDATE '.$db->prefix.'users SET charhp='.($pun_user['charmaxhp']).',chargold='.($pun_user['chargold'] - $healhp).' WHERE id='.$pun_user['id']) or error('EN:4181567392', __FILE__, __LINE__, $db->error());
@@ -85,8 +96,9 @@ if (($dir == 'heal') && (hasheal()) && (hashp())) {
 	exit();
 }
 
+// Воскрешение
 if (($dir == 'revive') && (!hashp())) {
-	$rdb = $db->query('SELECT * FROM '.$db->prefix.'regions WHERE id='.$pun_user['charregion']) or error('EN:7726942597', __FILE__, __LINE__, $db->error());
+	$rdb = $db->query('SELECT gx,gy FROM '.$db->prefix.'regions WHERE id='.$pun_user['charregion']) or error('EN:7726942597', __FILE__, __LINE__, $db->error());
 	$gr = $db->fetch_assoc($rdb);	
 	$pun_user['charhp'] = percent($pun_user['charmaxhp'], 80);
 	$pun_user['charx'] = $gr['gx'];
@@ -94,12 +106,26 @@ if (($dir == 'revive') && (!hashp())) {
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charx='.$pun_user['charx'].',chary='.$pun_user['chary'].' WHERE id='.$pun_user['id']) or error('EN:5178453451', __FILE__, __LINE__, $db->error());	
 	redirect('game_index.php', 'Ты был воскрешен!');
 }
+// Отдых
+$hasrest = '';
+if (($dir == 'rest') && (hasrest())) {
+	// Отдых - 90%
+	if (rand(0,100) <= 10) {
+		$hasrest .= 'Вы чувствуете себя отдохнувшим и полным сил.'.'<br/>';
+		$pun_user['charhp'] = $pun_user['charmaxhp'];
+		$pun_user['charfood']--;
+		$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charfood='.$pun_user['charfood'].' WHERE id='.$pun_user['id']) or error('EN:6935927915', __FILE__, __LINE__, $db->error());
+	// Нападение на Героя во время отдыха - 10%
+	} else
+		$dir = 'fight';
+}
 
+// Бой
 $hasfight = '';
 if (($dir == 'fight') && (hasfight()) && hashp()) {
-	$hasfight = '';
 	$dam = 12;
 	$pun_user['charhp'] = $pun_user['charhp'] - $dam;
+	// Поражение
 	if ($pun_user['charhp'] <= 0) {
 		$hasfight .= 'Ты погиб!'.'<br/>';
 		$pun_user['charhp'] = 0;
@@ -109,6 +135,7 @@ if (($dir == 'fight') && (hasfight()) && hashp()) {
 		$exp = percent($pun_user['charexp'], 10);
 		$pun_user['charexp'] = $pun_user['charexp'] - $exp;
 		$hasfight .= 'Ты потерял опыт!'.'<br/>';
+	// Победа
 	} else {
 		$hasfight .= 'Ты победил!'.'<br/>';
 		$gold = rand(10, 20);
@@ -174,6 +201,17 @@ ob_start();
 			<div class="inbox">
 				<ul>
 					<li><a href="game_index.php?dir=heal"><?php echo ($healhp); ?> ♥ за <?php echo $healhp;?> зол.</a></li>
+				</ul>
+			</div>
+		</div>
+		<?php }; ?>
+		
+		<?php if (hasrest()) {?>
+		<h2><span>Отдых</span></h2>
+		<div class="box">
+			<div class="inbox">
+				<ul>
+					<li><a href="game_index.php?dir=rest">Разжечь огонь</a></li>
 				</ul>
 			</div>
 		</div>
@@ -264,6 +302,23 @@ ob_start();
 		</div>
 	</div>
 	<?php } ?>
+	
+	<?php if ($hasrest != '') { ?>
+	<div class="blockform">
+		<h2><span><?php echo 'Отдых'; ?></span></h2>
+		<div class="box">
+			<div class="inform">
+				<fieldset>
+					<legend>Вы разожгли огонь</legend>
+					<div class="infldset">
+						<p><?php echo $hasrest; ?></p>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+	<?php } ?>	
+	
 	<?php } ?>
 	
 </div>
@@ -297,14 +352,6 @@ ob_start();
 		?>
 	</div>
 </div>
-
-
-
-
-
-
-
-
 
 <?php
 $tpl_main = str_replace('<pun_main>', trim(ob_get_contents()), $tpl_main);
