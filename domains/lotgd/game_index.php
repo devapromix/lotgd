@@ -79,7 +79,7 @@ function hasfight() {
 
 function hasbuyfood() {
 	global $cur_loc, $pun_user;
-	return (hasproperties($cur_loc['properties'], 'I') && ($pun_user['charhp'] > 0) && ($pun_user['charfood'] < 10));
+	return (hasproperties($cur_loc['properties'], 'I') && ($pun_user['charhp'] > 0) && ($pun_user['charfood'] < 10) && ($pun_user['chargold'] >= 100));
 }
 
 function hasrest() {
@@ -94,6 +94,13 @@ if (($dir == 'heal') && (hasheal()) && (hashp())) {
 	}
 	header('Location: game_index.php');
 	exit();
+}
+
+// Покупка еды в Таверне
+if (($dir == 'buyfood') && (hasbuyfood())) {
+	$pun_user['chargold'] = $pun_user['chargold'] - 100;
+	$pun_user['charfood']++;
+	$db->query('UPDATE '.$db->prefix.'users SET charfood='.$pun_user['charfood'].',chargold='.$pun_user['chargold'].' WHERE id='.$pun_user['id']) or error('EN:3151912713', __FILE__, __LINE__, $db->error());
 }
 
 // Воскрешение
@@ -190,6 +197,17 @@ ob_start();
 			<div class="inbox">
 				<ul>
 					<li><a href="game_index.php?dir=revive">Воскресить</a></li>
+				</ul>
+			</div>
+		</div>
+		<?php }; ?>
+		
+		<?php if (hasbuyfood()) {?>
+		<h2><span>Купить провизию</span></h2>
+		<div class="box">
+			<div class="inbox">
+				<ul>
+					<li><a href="game_index.php?dir=buyfood">Купить за 100 зол.</a></li>
 				</ul>
 			</div>
 		</div>
