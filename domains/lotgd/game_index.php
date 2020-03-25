@@ -86,9 +86,11 @@ if (($dir == 'heal') && (hasheal()) && (hashp())) {
 }
 
 if (($dir == 'revive') && (!hashp())) {
+	$rdb = $db->query('SELECT * FROM '.$db->prefix.'regions WHERE id='.$pun_user['charregion']) or error('EN:7726942597', __FILE__, __LINE__, $db->error());
+	$gr = $db->fetch_assoc($rdb);	
 	$pun_user['charhp'] = percent($pun_user['charmaxhp'], 80);
-	$pun_user['charx'] = 0;
-	$pun_user['chary'] = 0;
+	$pun_user['charx'] = $gr['gx'];
+	$pun_user['chary'] = $gr['gy'];
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charx='.$pun_user['charx'].',chary='.$pun_user['chary'].' WHERE id='.$pun_user['id']) or error('EN:5178453451', __FILE__, __LINE__, $db->error());	
 	redirect('game_index.php', 'Ты был воскрешен!');
 }
