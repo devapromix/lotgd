@@ -1,5 +1,8 @@
 <?php
 
+$price_room = 50; // Цена съема комнаты в таверне
+$price_food = 75; //Цена порции пищи в таверне
+
 function gameversion(){
 	return 'v.0.0.1';
 }

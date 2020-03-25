@@ -78,8 +78,13 @@ function hasfight() {
 }
 
 function hasbuyfood() {
-	global $cur_loc, $pun_user;
-	return (hasproperties($cur_loc['properties'], 'I') && ($pun_user['charhp'] > 0) && ($pun_user['charfood'] < 10) && ($pun_user['chargold'] >= 100));
+	global $cur_loc, $pun_user, $price_food;
+	return (hasproperties($cur_loc['properties'], 'I') && ($pun_user['charhp'] > 0) && ($pun_user['charfood'] < 10) && ($pun_user['chargold'] >= $price_food));
+}
+
+function hasrestininn() {
+	global $cur_loc, $pun_user, $price_room;
+	return (hasproperties($cur_loc['properties'], 'I') && ($pun_user['charhp'] > 0) && ($pun_user['chargold'] >= $price_room));
 }
 
 function hasrest() {
@@ -98,7 +103,7 @@ if (($dir == 'heal') && (hasheal()) && (hashp())) {
 
 // Покупка еды в Таверне
 if (($dir == 'buyfood') && (hasbuyfood())) {
-	$pun_user['chargold'] = $pun_user['chargold'] - 100;
+	$pun_user['chargold'] = $pun_user['chargold'] - $price_food;
 	$pun_user['charfood']++;
 	$db->query('UPDATE '.$db->prefix.'users SET charfood='.$pun_user['charfood'].',chargold='.$pun_user['chargold'].' WHERE id='.$pun_user['id']) or error('EN:3151912713', __FILE__, __LINE__, $db->error());
 }
@@ -113,6 +118,15 @@ if (($dir == 'revive') && (!hashp())) {
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charx='.$pun_user['charx'].',chary='.$pun_user['chary'].' WHERE id='.$pun_user['id']) or error('EN:5178453451', __FILE__, __LINE__, $db->error());	
 	redirect('game_index.php', 'Ты был воскрешен!');
 }
+// Отдых в таверне
+$hasrestininn = '';
+if (($dir == 'restininn') && (hasrestininn())) {
+	$hasrestininn .= 'Вы чувствуете себя отдохнувшим и полным сил.'.'<br/>';
+	$pun_user['charhp'] = $pun_user['charmaxhp'];
+	$pun_user['chargold'] = $pun_user['chargold'] - $price_room;
+	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',chargold='.$pun_user['chargold'].' WHERE id='.$pun_user['id']) or error('EN:2967273685', __FILE__, __LINE__, $db->error());
+}
+
 // Отдых
 $hasrest = '';
 if (($dir == 'rest') && (hasrest())) {
@@ -120,11 +134,11 @@ if (($dir == 'rest') && (hasrest())) {
 	if (rand(0,100) <= 10) {
 		$hasrest .= 'Вы чувствуете себя отдохнувшим и полным сил.'.'<br/>';
 		$pun_user['charhp'] = $pun_user['charmaxhp'];
-		$pun_user['charfood']--;
-		$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charfood='.$pun_user['charfood'].' WHERE id='.$pun_user['id']) or error('EN:6935927915', __FILE__, __LINE__, $db->error());
 	// Нападение на Героя во время отдыха - 10%
 	} else
 		$dir = 'fight';
+	$pun_user['charfood']--;
+	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charfood='.$pun_user['charfood'].' WHERE id='.$pun_user['id']) or error('EN:6935597915', __FILE__, __LINE__, $db->error());
 }
 
 // Бой
@@ -207,7 +221,7 @@ ob_start();
 		<div class="box">
 			<div class="inbox">
 				<ul>
-					<li><a href="game_index.php?dir=buyfood">Купить за 100 зол.</a></li>
+					<li><a href="game_index.php?dir=buyfood">Купить за <?php echo $price_food; ?> зол.</a></li>
 				</ul>
 			</div>
 		</div>
@@ -230,6 +244,17 @@ ob_start();
 			<div class="inbox">
 				<ul>
 					<li><a href="game_index.php?dir=rest">Разжечь огонь</a></li>
+				</ul>
+			</div>
+		</div>
+		<?php }; ?>
+		
+		<?php if (hasrestininn()) {?>
+		<h2><span>Снять комнату</span></h2>
+		<div class="box">
+			<div class="inbox">
+				<ul>
+					<li><a href="game_index.php?dir=restininn">Снять за <?php echo $price_room; ?> зол.</a></li>
 				</ul>
 			</div>
 		</div>
@@ -330,6 +355,22 @@ ob_start();
 					<legend>Вы разожгли огонь</legend>
 					<div class="infldset">
 						<p><?php echo $hasrest; ?></p>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+	<?php } ?>	
+	
+	<?php if ($hasrestininn != '') { ?>
+	<div class="blockform">
+		<h2><span><?php echo 'Ночь в таверне'; ?></span></h2>
+		<div class="box">
+			<div class="inform">
+				<fieldset>
+					<legend>Вы хорошо отдохнули</legend>
+					<div class="infldset">
+						<p><?php echo $hasrestininn; ?></p>
 					</div>
 				</fieldset>
 			</div>
