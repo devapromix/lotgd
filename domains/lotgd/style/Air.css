@@ -1649,28 +1649,3 @@ html, body, .pun {
 .pun .inew .icon {
 	border-color: #91b3d9 #87a8d1 #6c85bb #7292c3;
 }
-
-
-
-
-
-
-#column-1 {
-  float: left;
-  min-height: 100%;
-}
-
-#column-2 {
-  width: 65%;
-  min-height: 100%;
-  float: left;
-}
-
-#column-2 .blockform {
-	padding-left: 1.5em;
-}
-
-#column-3 {
-  min-height: 100%;
-  float: right;
-}

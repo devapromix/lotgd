@@ -89,7 +89,7 @@ function hasrestininn() {
 
 function hasrest() {
 	global $cur_loc, $pun_user;
-	return (hasfight() && ($pun_user['charfood'] > 0));
+	return (hasproperties($cur_loc['properties'], 'R') && ($pun_user['charfood'] > 0));
 }
 
 
@@ -184,6 +184,33 @@ ob_start();
 
 <div id="column-1">
 	<div class="blockmenu">
+
+		<?php if ($pun_user['is_guest']) { ?>
+		
+		<?php
+		//echo '<h2><span>Зал Славы</span></h2>';
+		$topchars = $db->query('SELECT charname,charexp FROM '.$db->prefix.'users order by charexp desc limit 7') or error('EN:3122763926', __FILE__, __LINE__, $db->error());
+		$p = "";
+		$n = 0;
+		$p .= '<div class="box">';
+		$p .= '<div class="inbox">';
+		$p .= '<ul>';
+		while ($curchar = mysqli_fetch_array($topchars)) {
+			$n++;
+			$p .= '<li><p><b>'.$n.'. '.$curchar['charname'].'</b></p></li>';
+		}
+		$p .= '</ul>';
+		$p .= '</div>';
+		$p .= '</div>';
+		//echo $p;
+		//echo '<h2 class="block2"><span>Случайный Герой</span></h2>';
+		$result = $db->query('SELECT charname,charrace,charclass,charlevel FROM '.$db->prefix.'users  order by rand() limit 1') or error('EN:4714503458', __FILE__, __LINE__, $db->error());
+		$r = mysqli_fetch_array($result);
+		$r['is_guest'] = true;
+		//echo characterbox($r);
+		?>		
+		
+		<?php } else { ?>
 	
 		<?php if ($pun_user['charhp'] > 0) {?>
 		<h2><span>Идти</span></h2>
@@ -274,9 +301,11 @@ ob_start();
 			generate_game_admin_menu();
 		}
 		?>
+		<?php }; ?>
 		
 	</div>
 </div>
+
 <div id="column-2">
 
 	<?php if ($pun_user['is_guest']) { ?>
@@ -316,6 +345,15 @@ ob_start();
 		</div>
 	</div>
 	<?php } else {?>
+	<div style="float: right;">
+		<span>
+			<b data-toggle="tooltip" title="<?php echo characterracename($pun_user).' '.characterclassname($pun_user).' '.$pun_user['charlevel'].' уровня'; ?>"><?php echo $pun_user['charname']; ?></b>
+			<span data-toggle="tooltip" title="Опыт <?php echo $pun_user['charexp'].'/'.charactermaxexp($pun_user['charlevel']); ?>"><img src="img/game/charexp.png"> <?php echo $pun_user['charexp']; ?></span>
+			<span data-toggle="tooltip" title="Здоровье"><img src="img/game/charhp.png"> <?php echo $pun_user['charhp']; ?>/<?php echo $pun_user['charmaxhp']; ?></span>
+			<span data-toggle="tooltip" title="Золото"><img src="img/game/chargold.png"> <?php echo $pun_user['chargold']; ?></span>
+			<span data-toggle="tooltip" title="Провизия"><img src="img/game/charfood.png"> <?php echo $pun_user['charfood']; ?></span>
+		</span>
+	</div>
 	<div class="blockform">
 		<h2><span><?php echo pun_htmlspecialchars($cur_loc['name']); ?></span></h2>
 		<div class="box">
@@ -380,36 +418,6 @@ ob_start();
 	
 	<?php } ?>
 	
-</div>
-<div id="column-3">
-	<div class="blockmenu">
-		<?php
-		if (!$pun_user['is_guest']) {
-			echo characterbox($pun_user);
-		} else {
-			echo '<h2><span>Зал Славы</span></h2>';
-			$topchars = $db->query('SELECT charname,charexp FROM '.$db->prefix.'users  order by charexp desc limit 7') or error('EN:3122763926', __FILE__, __LINE__, $db->error());
-			$p = "";
-			$n = 0;
-			$p .= '<div class="box">';
-			$p .= '<div class="inbox">';
-			$p .= '<ul>';
-			while ($curchar = mysqli_fetch_array($topchars)) {
-				$n++;
-				$p .= '<li><p><b>'.$n.'. '.$curchar['charname'].'</b></p></li>';
-			}
-			$p .= '</ul>';
-			$p .= '</div>';
-			$p .= '</div>';
-			echo $p;
-			echo '<h2><span>Случайный Герой</span></h2>';
-			$result = $db->query('SELECT charname,charrace,charclass,charlevel FROM '.$db->prefix.'users  order by rand() limit 1') or error('EN:4714503458', __FILE__, __LINE__, $db->error());
-			$r = mysqli_fetch_array($result);
-			$r['is_guest'] = true;
-			echo characterbox($r);
-		}
-		?>
-	</div>
 </div>
 
 <?php
