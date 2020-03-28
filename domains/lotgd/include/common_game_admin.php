@@ -13,7 +13,8 @@ function generate_game_admin_menu($page = '') {
 	<div class="box">
 		<div class="inbox">
 			<ul>
-				<li<?php if ($page == 'index') echo ' class="isactive"'; ?>><a href="game_admin_index.php">Статистика</a></li>
+				<li<?php if ($page == 'stat') echo ' class="isactive"'; ?>><a href="game_admin_index.php">Статистика</a></li>
+				<li<?php if ($page == 'mobs') echo ' class="isactive"'; ?>><a href="game_admin_mobs.php">Бестиарий</a></li>
 			</ul>
 		</div>
 	</div>

@@ -78,7 +78,7 @@ function generate_admin_menu($page = '')
 
 	if ($is_admin)
 	{
-		generate_game_admin_menu();
+		generate_game_admin_menu($page);
 ?>
 		<h2 class="block2"><span><?php echo $lang_admin_common['Admin menu'] ?></span></h2>
 		<div class="box">

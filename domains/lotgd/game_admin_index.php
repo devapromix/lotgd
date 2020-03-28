@@ -20,7 +20,7 @@ if (!$pun_user['is_admmod'])
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$page_title = array(pun_htmlspecialchars($pun_config['o_board_title']), $lang_admin_common['Admin'], $lang_admin_common['Index']);
+$page_title = array(pun_htmlspecialchars($pun_config['o_board_title']), $lang_admin_common['Admin'], 'Статистика');
 define('PUN_ACTIVE_PAGE', 'admin');
 require PUN_ROOT.'header.php';
 ?>
@@ -28,7 +28,7 @@ require PUN_ROOT.'header.php';
 	<div id="adminmenu" class="blockmenu">
 <?php
 
-generate_admin_menu('index');
+generate_admin_menu('stat');
 
 ?>
 	</div>
