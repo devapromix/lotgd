@@ -180,15 +180,14 @@ ob_start();
 
 ?>
 
+<div id="adminconsole" class="block2col">
 
-
-<div id="column-1">
 	<div class="blockmenu">
 
 		<?php if ($pun_user['is_guest']) { ?>
 		
 		<?php
-		//echo '<h2><span>Зал Славы</span></h2>';
+		echo '<h2><span>Зал Славы</span></h2>';
 		$topchars = $db->query('SELECT charname,charexp FROM '.$db->prefix.'users order by charexp desc limit 7') or error('EN:3122763926', __FILE__, __LINE__, $db->error());
 		$p = "";
 		$n = 0;
@@ -202,12 +201,12 @@ ob_start();
 		$p .= '</ul>';
 		$p .= '</div>';
 		$p .= '</div>';
-		//echo $p;
-		//echo '<h2 class="block2"><span>Случайный Герой</span></h2>';
+		echo $p;
+		echo '<h2 class="block2"><span>Случайный Герой</span></h2>';
 		$result = $db->query('SELECT charname,charrace,charclass,charlevel FROM '.$db->prefix.'users  order by rand() limit 1') or error('EN:4714503458', __FILE__, __LINE__, $db->error());
 		$r = mysqli_fetch_array($result);
 		$r['is_guest'] = true;
-		//echo characterbox($r);
+		echo characterbox($r);
 		?>		
 		
 		<?php } else { ?>
@@ -232,81 +231,20 @@ ob_start();
 				</ul>
 			</div>
 		</div>
-		<?php } else {; ?>
-		<h2><span>Воскрешение</span></h2>
-		<div class="box">
-			<div class="inbox">
-				<ul>
-					<li><a href="game_index.php?dir=revive">Воскресить</a></li>
-				</ul>
-			</div>
-		</div>
-		<?php }; ?>
+		<?php } else 
+			echo charmenu('Воскрешение', 'Воскресить', 'game_index.php?dir=revive');
 		
-		<?php if (hasbuyfood()) {?>
-		<h2><span>Купить провизию</span></h2>
-		<div class="box">
-			<div class="inbox">
-				<ul>
-					<li><a href="game_index.php?dir=buyfood">Купить за <?php echo $price_food; ?> зол.</a></li>
-				</ul>
-			</div>
-		</div>
-		<?php }; ?>
-		
-		<?php if (hasheal()) {?>
-		<h2><span>Исцелить</span></h2>
-		<div class="box">
-			<div class="inbox">
-				<ul>
-					<li><a href="game_index.php?dir=heal"><?php echo ($healhp); ?> ♥ за <?php echo $healhp;?> зол.</a></li>
-				</ul>
-			</div>
-		</div>
-		<?php }; ?>
-		
-		<?php if (hasrest()) {?>
-		<h2><span>Отдых</span></h2>
-		<div class="box">
-			<div class="inbox">
-				<ul>
-					<li><a href="game_index.php?dir=rest">Разжечь огонь</a></li>
-				</ul>
-			</div>
-		</div>
-		<?php }; ?>
-		
-		<?php if (hasrestininn()) {?>
-		<h2><span>Снять комнату</span></h2>
-		<div class="box">
-			<div class="inbox">
-				<ul>
-					<li><a href="game_index.php?dir=restininn">Снять за <?php echo $price_room; ?> зол.</a></li>
-				</ul>
-			</div>
-		</div>
-		<?php }; ?>
-		
-		<?php if (hasfight()) {?>
-		<h2><span>Атаковать</span></h2>
-		<div class="box">
-			<div class="inbox">
-				<ul>
-					<li><a href="game_index.php?dir=fight"><?php echo enemyname(); ?></a></li>
-				</ul>
-			</div>
-		</div>
-		<?php }; 
-		if ($pun_user['is_admmod']) {
+		if (hasbuyfood()) echo charmenu('Купить провизию', 'Купить за '.$price_food.' зол.', 'game_index.php?dir=buyfood');		
+		if (hasheal()) echo charmenu('Исцелить', $healhp.' ♥ за '.$healhp.' зол.', 'game_index.php?dir=heal');		
+		if (hasrest()) echo charmenu('Отдых', 'Разжечь огонь', 'game_index.php?dir=rest');
+		if (hasrestininn()) echo charmenu('Снять комнату', 'Снять за '.$price_room.' зол.', 'game_index.php?dir=restininn');
+		if (hasfight()) echo charmenu('Атаковать', enemyname(), 'game_index.php?dir=fight');
+		if ($pun_user['is_admmod'])
 			generate_game_admin_menu();
-		}
 		?>
-		<?php }; ?>
-		
-	</div>
-</div>
 
-<div id="column-2">
+		<?php }; ?>		
+</div>
 
 	<?php if ($pun_user['is_guest']) { ?>
 	<div class="blockform">
@@ -345,15 +283,7 @@ ob_start();
 		</div>
 	</div>
 	<?php } else {?>
-	<div style="float: right;">
-		<span>
-			<b data-toggle="tooltip" title="<?php echo characterracename($pun_user).' '.characterclassname($pun_user).' '.$pun_user['charlevel'].' уровня'; ?>"><?php echo $pun_user['charname']; ?></b>
-			<span data-toggle="tooltip" title="Опыт <?php echo $pun_user['charexp'].'/'.charactermaxexp($pun_user['charlevel']); ?>"><img src="img/game/charexp.png"> <?php echo $pun_user['charexp']; ?></span>
-			<span data-toggle="tooltip" title="Здоровье"><img src="img/game/charhp.png"> <?php echo $pun_user['charhp']; ?>/<?php echo $pun_user['charmaxhp']; ?></span>
-			<span data-toggle="tooltip" title="Золото"><img src="img/game/chargold.png"> <?php echo $pun_user['chargold']; ?></span>
-			<span data-toggle="tooltip" title="Провизия"><img src="img/game/charfood.png"> <?php echo $pun_user['charfood']; ?></span>
-		</span>
-	</div>
+	<div style="float: right;"><span class="badge badge-pill badge-info"><?php echo '&nbsp;'.charinfo($pun_user).'&nbsp;'; ?></span></div>
 	<div class="blockform">
 		<h2><span><?php echo pun_htmlspecialchars($cur_loc['name']); ?></span></h2>
 		<div class="box">
@@ -417,7 +347,6 @@ ob_start();
 	<?php } ?>	
 	
 	<?php } ?>
-	
 </div>
 
 <?php

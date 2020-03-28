@@ -45,6 +45,29 @@ function hasproperties($properties, $f) {
 		return true;
 }
 
+function charmenu($menutitle, $linktitle, $link){
+	$p = '';
+	$p .= '<h2 class="block2"><span>'.$menutitle.'</span></h2>';
+	$p .= '<div class="box">';
+	$p .= '<div class="inbox">';
+	$p .= '<ul>';
+	$p .= '<li><a href="'.$link.'">'.$linktitle.'</a></li>';
+	$p .= '</ul>';
+	$p .= '</div>';
+	$p .= '</div>';	
+	return $p;
+}
+
+function charinfo($pun_user){
+	$p = '';
+	$p .= '<span data-toggle="tooltip" title="'.characterracename($pun_user).' '.characterclassname($pun_user).' '.$pun_user['charlevel'].' уровня">'.$pun_user['charname'].' </span>';
+	$p .= '<span data-toggle="tooltip" title="Опыт '. $pun_user['charexp'].'/'.charactermaxexp($pun_user['charlevel']).'"><img src="img/game/charexp.png"> '.$pun_user['charexp'].' </span>';
+	$p .= '<span data-toggle="tooltip" title="Здоровье"><img src="img/game/charhp.png"> '.$pun_user['charhp'].'/'.$pun_user['charmaxhp'].' </span>';
+	$p .= '<span data-toggle="tooltip" title="Золото"><img src="img/game/chargold.png"> '.$pun_user['chargold'].' </span>';
+	$p .= '<span data-toggle="tooltip" title="Провизия"><img src="img/game/charfood.png"> '.$pun_user['charfood'].'</span>';
+	return $p;
+}
+
 function characterbox($u){
 	$p = '';
 	if (!$u['is_guest'])

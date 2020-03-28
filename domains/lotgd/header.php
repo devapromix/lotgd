@@ -102,10 +102,8 @@ if (!defined('PUN_ALLOW_INDEX'))
 
 ?>
 <title><?php echo generate_page_title($page_title, $p) ?></title>
-<link rel="stylesheet" type="text/css" href="vendors/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="style/<?php echo $pun_user['style'].'.css' ?>" />
-</head>
-<body>
+<link rel="stylesheet" type="text/css" href="vendors/bootstrap/css/bootstrap.min.css" />
 <?php
 
 if (defined('PUN_ADMIN_CONSOLE'))
