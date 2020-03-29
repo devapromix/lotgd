@@ -1,7 +1,8 @@
 <?php
 
 $price_room = 50; // Цена съема комнаты в таверне
-$price_food = 75; //Цена порции пищи в таверне
+$price_food = 75; // Цена порции пищи в таверне
+$recent_inc = 10; // Кол-во сообщ. последних событий
 
 function gameversion(){
 	return 'v.0.0.1';
@@ -94,13 +95,23 @@ function percent($allvalue, $percent){
 }
 
 function events(){
-	global $db;
+	global $db, $recent_inc;
 	$p = '';
-	$msgs = $db->query('SELECT * FROM '.$db->prefix.'recent_incidents ORDER BY id DESC LIMIT 3') or error('EN:2479345682', __FILE__, __LINE__, $db->error());
+	$msgs = $db->query('SELECT * FROM '.$db->prefix.'recent_incidents ORDER BY id DESC LIMIT '.$recent_inc) or error('EN:2479345682', __FILE__, __LINE__, $db->error());
 	while ($msg = mysqli_fetch_array($msgs)) {
 		$p .= '<li><p>'.$msg['message'].'</p></li>';
 	}
 	return $p;
+}
+
+function add_event_msg($msg) {
+	global $db, $recent_inc;
+	$msgs = $db->query('SELECT * FROM '.$db->prefix.'recent_incidents') or error('Unable to fetch messages list', __FILE__, __LINE__, $db->error());
+	$num_rows = mysqli_num_rows( $msgs);
+	if ($num_rows >= $recent_inc) {
+		$db->query('DELETE FROM '.$db->prefix.'recent_incidents LIMIT 1') or error('Unable to delete message', __FILE__, __LINE__, $db->error());
+	}
+	$db->query('INSERT INTO '.$db->prefix.'recent_incidents (message) VALUES (\''.$msg.'\')') or error('Unable to add message', __FILE__, __LINE__, $db->error());
 }
 
 ?>
