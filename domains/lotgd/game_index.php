@@ -67,6 +67,11 @@ if (($dir == 'south') && ($south_loc['name'] != '') && hashp()) {
 
 $healhp = $pun_user['charmaxhp'] - $pun_user['charhp'];
 
+function ininn() {
+	global $cur_loc;
+	return hasproperties($cur_loc['properties'], 'I');
+}
+
 function hasheal() {
 	global $healhp, $cur_loc, $pun_user;
 	return (hasproperties($cur_loc['properties'], '+') && ($healhp > 0) && ($pun_user['chargold'] >= $healhp));
@@ -79,12 +84,12 @@ function hasfight() {
 
 function hasbuyfood() {
 	global $cur_loc, $pun_user, $price_food;
-	return (hasproperties($cur_loc['properties'], 'I') && ($pun_user['charhp'] > 0) && ($pun_user['charfood'] < 10) && ($pun_user['chargold'] >= $price_food));
+	return (ininn() && ($pun_user['charhp'] > 0) && ($pun_user['charfood'] < 10) && ($pun_user['chargold'] >= $price_food));
 }
 
 function hasrestininn() {
 	global $cur_loc, $pun_user, $price_room;
-	return (hasproperties($cur_loc['properties'], 'I') && ($pun_user['charhp'] > 0) && ($pun_user['chargold'] >= $price_room));
+	return (ininn() && ($pun_user['charhp'] > 0) && ($pun_user['chargold'] >= $price_room));
 }
 
 function hasrest() {
@@ -248,7 +253,7 @@ ob_start();
 
 	<?php if ($pun_user['is_guest']) { ?>
 	<div class="blockform">
-		<h2><span>Здравствуй, путник!"</span></h2>
+		<h2><span>Здравствуй, путник!</span></h2>
 		<div class="box">
 			<div class="inform">
 				<fieldset>
@@ -263,19 +268,16 @@ ob_start();
 					</div>
 				</fieldset>
 			</div>
+		</div>
+			
+		<h2><span>Последние события в мире</span></h2>
+		<div class="box">
 			<div class="inform">
 				<fieldset>
-					<legend>Последние события в Эльвионе</legend>
+					<legend>Последние проишествия в Эльвионе</legend>
 					<div class="infldset">
 						<ul>
-						<?php
-							$p = '';
-							$msgs = $db->query('SELECT * FROM '.$db->prefix.'recent_incidents') or error('EN:3481045687', __FILE__, __LINE__, $db->error());
-							while ($msg = mysqli_fetch_array($msgs)) {
-								$p .= '<li><p>'.$msg['message'].'</p></li>';
-							}
-							echo $p;
-						?>
+						<?php echo events(); ?>
 						</ul>
 					</div>
 				</fieldset>
@@ -339,6 +341,22 @@ ob_start();
 					<legend>Вы хорошо отдохнули</legend>
 					<div class="infldset">
 						<p><?php echo $hasrestininn; ?></p>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+	<?php } ?>	
+	
+	<?php if (ininn()) { ?>
+	<div class="blockform">
+		<h2><span><?php echo 'Последние события в Эльвионе'; ?></span></h2>
+		<div class="box">
+			<div class="inform">
+				<fieldset>
+					<legend>Последние проишествия в мире</legend>
+					<div class="infldset">
+						<ul><?php echo events(); ?></ul>
 					</div>
 				</fieldset>
 			</div>

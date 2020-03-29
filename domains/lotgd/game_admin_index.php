@@ -34,21 +34,23 @@ generate_admin_menu('stat');
 	</div>
 </div>
 	<div class="block">
-		<h2><span>Статистика LotGD</span></h2>
+		<h2><span>Статистика</span></h2>
 		<div id="adintro" class="box">
 			<div class="inbox">
 				<p>Добро пожаловать в панель управления LotGD! Здесь собрана статистика игрового сервера.</p>
 			</div>
 		</div>
 
-<?php if ($install_file_exists) : ?>
-		<h2 class="block2"><span><?php echo $lang_admin_index['Alerts head'] ?></span></h2>
-		<div id="adalerts" class="box">
-			<p><?php printf($lang_admin_index['Install file exists'], '<a href="admin_index.php?action=remove_install_file">'.$lang_admin_index['Delete install file'].'</a>') ?></p>
+		<h2><span>Последние события</span></h2>
+		<div id="adintro" class="box">
+			<div class="inbox">
+				<ul>
+					<?php echo events(); ?>
+				</ul>
+			</div>
 		</div>
-<?php endif; ?>
 
-		<h2 class="block2"><span>Информация о LotGD</span></h2>
+		<h2 class="block2"><span>Информация</span></h2>
 		<div id="adstats" class="box">
 			<div class="inbox">
 				<dl>

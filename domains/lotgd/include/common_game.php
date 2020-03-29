@@ -93,4 +93,14 @@ function percent($allvalue, $percent){
 	return floor(($allvalue * $percent) / 100);
 }
 
+function events(){
+	global $db;
+	$p = '';
+	$msgs = $db->query('SELECT * FROM '.$db->prefix.'recent_incidents ORDER BY id DESC LIMIT 3') or error('EN:2479345682', __FILE__, __LINE__, $db->error());
+	while ($msg = mysqli_fetch_array($msgs)) {
+		$p .= '<li><p>'.$msg['message'].'</p></li>';
+	}
+	return $p;
+}
+
 ?>
