@@ -8,7 +8,7 @@
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
-
+require PUN_ROOT.'include/common_game.php';
 
 // If we are logged in, we shouldn't be here
 if (!$pun_user['is_guest'])
@@ -171,6 +171,9 @@ if (isset($_POST['form_sent']))
 		// Add the user
 		$db->query('INSERT INTO '.$db->prefix.'users (username, group_id, password, email, email_setting, timezone, dst, language, style, registered, registration_ip, last_visit, charname, chargender) VALUES(\''.$db->escape($username).'\', '.$intial_group_id.', \''.$password_hash.'\', \''.$db->escape($email1).'\', '.$email_setting.', '.$timezone.' , '.$dst.', \''.$db->escape($language).'\', \''.$pun_config['o_default_style'].'\', '.$now.', \''.$db->escape(get_remote_address()).'\', '.$now.', \''.$db->escape($charname).'\', '.$chargender.')') or error('Unable to create user', __FILE__, __LINE__, $db->error());
 		$new_uid = $db->insert_id();
+		
+		// Msg
+		add_reg_msg($charname, $chargender);
 
 		if ($pun_config['o_regs_verify'] == '0')
 		{

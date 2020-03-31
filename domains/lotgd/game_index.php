@@ -74,27 +74,27 @@ function ininn() {
 
 function hasheal() {
 	global $healhp, $cur_loc, $pun_user;
-	return (hasproperties($cur_loc['properties'], '+') && ($healhp > 0) && ($pun_user['chargold'] >= $healhp));
+	return (hasproperties($cur_loc['properties'], '+') && ($healhp > 0) && ($pun_user['chargold'] >= $healhp) && hashp());
 }
 
 function hasfight() {
 	global $cur_loc, $pun_user;
-	return (hasproperties($cur_loc['properties'], 'F') && ($pun_user['charhp'] > 0));
+	return (hasproperties($cur_loc['properties'], 'F') && hashp());
 }
 
 function hasbuyfood() {
 	global $cur_loc, $pun_user, $price_food;
-	return (ininn() && ($pun_user['charhp'] > 0) && ($pun_user['charfood'] < 10) && ($pun_user['chargold'] >= $price_food));
+	return (ininn() && hashp() && ($pun_user['charfood'] < 10) && ($pun_user['chargold'] >= $price_food));
 }
 
 function hasrestininn() {
 	global $cur_loc, $pun_user, $price_room;
-	return (ininn() && ($pun_user['charhp'] > 0) && ($pun_user['chargold'] >= $price_room));
+	return (ininn() && hashp() && ($pun_user['chargold'] >= $price_room));
 }
 
 function hasrest() {
 	global $cur_loc, $pun_user;
-	return (hasproperties($cur_loc['properties'], 'R') && ($pun_user['charfood'] > 0));
+	return (hasproperties($cur_loc['properties'], 'R') && ($pun_user['charfood'] > 0) && hashp());
 }
 
 
@@ -107,7 +107,7 @@ if (($dir == 'heal') && (hasheal()) && (hashp())) {
 }
 
 // Покупка еды в Таверне
-if (($dir == 'buyfood') && (hasbuyfood())) {
+if (($dir == 'buyfood') && hasbuyfood()) {
 	$pun_user['chargold'] = $pun_user['chargold'] - $price_food;
 	$pun_user['charfood']++;
 	$db->query('UPDATE '.$db->prefix.'users SET charfood='.$pun_user['charfood'].',chargold='.$pun_user['chargold'].' WHERE id='.$pun_user['id']) or error('EN:3151912713', __FILE__, __LINE__, $db->error());
@@ -148,7 +148,7 @@ if (($dir == 'rest') && (hasrest())) {
 
 // Бой
 $hasfight = '';
-if (($dir == 'fight') && (hasfight()) && hashp()) {
+if (($dir == 'fight') && hasfight()) {
 	$dam = 12;
 	$pun_user['charhp'] = $pun_user['charhp'] - $dam;
 	// Поражение
@@ -161,14 +161,15 @@ if (($dir == 'fight') && (hasfight()) && hashp()) {
 		$exp = percent($pun_user['charexp'], 10);
 		$pun_user['charexp'] = $pun_user['charexp'] - $exp;
 		$hasfight .= 'Ты потерял опыт!'.'<br/>';
+		add_death_msg($pun_user['charname'], $pun_user['chargender'], $cur_loc['name']); // Сообщение
 	// Победа
 	} else {
 		$hasfight .= 'Ты победил!'.'<br/>';
 		$gold = rand(10, 20);
-		$hasfight .= 'Золото +'.$gold.'<br/>';	
+		$hasfight .= 'Золото +'.$gold.'<br/>';
 		$pun_user['chargold'] = $pun_user['chargold'] + $gold;
 		$exp = rand(15, 25);
-		$hasfight .= 'Опыт +'.$exp.'<br/>';	
+		$hasfight .= 'Опыт +'.$exp.'<br/>';
 		$pun_user['charexp'] = $pun_user['charexp'] + $exp;
 	}
 	

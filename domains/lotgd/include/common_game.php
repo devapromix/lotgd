@@ -114,4 +114,36 @@ function add_event_msg($msg) {
 	$db->query('INSERT INTO '.$db->prefix.'recent_incidents (message) VALUES (\''.$msg.'\')') or error('Unable to add message', __FILE__, __LINE__, $db->error());
 }
 
+function add_death_msg($name, $gender, $location) {
+	switch(rand(1, 2)) {
+		case 1:
+			if ($gender == 0)
+				$r = '<b>'.$name.'</b> умер в локации <b>'.$location.'</b>.';
+			else
+				$r = '<b>'.$name.'</b> умерла в локации <b>'.$location.'</b>.';
+			break;
+		case 2:
+			if ($gender == 0)
+				$r = '<b>'.$name.'</b> погиб в локации <b>'.$location.'</b>.';
+			else
+				$r = '<b>'.$name.'</b> погибла в локации <b>'.$location.'</b>.';
+			break;
+		case 3:
+			if ($gender == 0)
+				$r = '<b>'.$name.'</b> был убит в локации <b>'.$location.'</b>.';
+			else
+				$r = '<b>'.$name.'</b> была убита в локации <b>'.$location.'</b>.';
+			break;
+	}
+	add_event_msg($r);
+}
+
+function add_reg_msg($name, $gender) {
+	if ($gender == 0)
+		$r = 'Новый герой <b>'.$name.'</b> пришел в <b>Эльвион</b>.';
+	else
+		$r = 'Новая героиня <b>'.$name.'</b> пришла в <b>Эльвион</b>.';
+	add_event_msg($r);
+}
+
 ?>
