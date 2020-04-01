@@ -8,14 +8,18 @@ function gameversion(){
 	return 'v.0.0.1';
 }
 
-function enemyname(){
+function enemyname($u){
 	$p = '';
-	$p .= 'Кричащий Бегун<br/>';
+	$p .= '<b>'.$u['charenemyname'].'</b><br/>';
 	$p .= '<small>';
 	$p .= 'Птица 1 уровня<br/>';
 	$p .= '♥ Здоровье 255';
 	$p .= '</small>';
 	return $p;
+}
+
+function genenemy($location_type) {
+	
 }
 
 function charactermaxexp($level){

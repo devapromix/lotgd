@@ -244,7 +244,7 @@ ob_start();
 		if (hasheal()) echo charmenu('Исцелить', $healhp.' ♥ за '.$healhp.' зол.', 'game_index.php?dir=heal');		
 		if (hasrest()) echo charmenu('Отдых', 'Разжечь огонь', 'game_index.php?dir=rest');
 		if (hasrestininn()) echo charmenu('Снять комнату', 'Снять за '.$price_room.' зол.', 'game_index.php?dir=restininn');
-		if (hasfight()) echo charmenu('Атаковать', enemyname(), 'game_index.php?dir=fight');
+		if (hasfight()) echo charmenu('Атаковать', enemyname($pun_user), 'game_index.php?dir=fight');
 		if ($pun_user['is_admmod'])
 			generate_game_admin_menu();
 		?>
