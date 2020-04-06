@@ -209,7 +209,7 @@ ob_start();
 		$p .= '</div>';
 		echo $p;
 		echo '<h2 class="block2"><span>Случайный Герой</span></h2>';
-		$result = $db->query('SELECT charname,charrace,charclass,charlevel FROM '.$db->prefix.'users  order by rand() limit 1') or error('EN:4714503458', __FILE__, __LINE__, $db->error());
+		$result = $db->query('SELECT charname,charrace,charclass,charlevel FROM '.$db->prefix.'users where charlevel>1 order by rand() limit 1') or error('EN:4714503458', __FILE__, __LINE__, $db->error());
 		$r = mysqli_fetch_array($result);
 		$r['is_guest'] = true;
 		echo characterbox($r);
