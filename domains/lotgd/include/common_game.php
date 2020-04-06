@@ -8,12 +8,31 @@ function gameversion(){
 	return 'v.0.0.1';
 }
 
+function enemytype($typeid) {
+	$r = '';
+	switch($typeid) {
+		case 0:
+			$r = 'Нежить';
+			break;
+		case 1:
+			$r = 'Гуманоид';
+			break;
+		case 2:
+			$r = 'Животное';
+			break;
+		case 3:
+			$r = 'Демон';
+			break;
+	}
+	return $r;
+}
+
 function enemyname($u){
 	$p = '';
 	$p .= '<b>'.$u['charenemyname'].'</b><br/>';
 	$p .= '<small>';
-	$p .= 'Птица 1 уровня<br/>';
-	$p .= '♥ Здоровье 255';
+	$p .= enemytype($u['charenemytype']).' '.$u['charenemylevel'].' уровня<br/>';
+	$p .= '♥ Здоровье '.$u['charenemyhp'];
 	$p .= '</small>';
 	return $p;
 }
