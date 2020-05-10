@@ -87,9 +87,22 @@ function thead(){?>
 			<form id="mobs" method="post" action="game_admin_mobs.php">
 				<div class="inform">
 					<fieldset>
-						<legend>Добавить моба</legend>
+						<legend>Добавить нового моба</legend>
 						<div class="infldset">
-							<p>Добавление нового моба.</p>
+							<ul>
+							<li><b>Виды мобов:</b>
+							<?php
+							$r = '';
+							for ($i=0;$i<9;$i++) {
+								if (enemytype($i) <> '') {
+									$s = ($i==0)?' ':', ';
+									$r .= $s.enemytype($i).'('.$i.')';
+								}
+							}
+							echo $r.'.';
+							?>
+							</li>
+							</ul>
 							<table>
 							<?php echo thead(); ?>
 							<tbody>
