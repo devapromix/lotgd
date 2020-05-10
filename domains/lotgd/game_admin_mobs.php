@@ -102,6 +102,18 @@ function thead(){?>
 							echo $r.'.';
 							?>
 							</li>
+							<li><b>Ареал обитания:</b>
+							<?php
+							$r = '';
+							for ($i=-1;$i<9;$i++) {
+								if (enemyareal($i) <> '') {
+									$s = ($i<=0)?' ':', ';
+									$r .= $s.enemyareal($i).'('.$i.')';
+								}
+							}
+							echo $r.'.';
+							?>
+							</li>
 							</ul>
 							<table>
 							<?php echo thead(); ?>

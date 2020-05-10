@@ -27,6 +27,43 @@ function enemytype($typeid) {
 	return $r;
 }
 
+function enemyareal($location_type) {
+	$r = '';
+	switch($location_type) {
+		case -1:
+			$r = 'Все';
+			break;
+		case 0:
+			$r = 'Кладбище';
+			break;
+		case 1:
+			$r = 'Лес';
+			break;
+		case 2:
+			$r = 'Равнина';
+			break;
+		case 3:
+			$r = 'Степь';
+			break;
+		case 4:
+			$r = 'Пустыня';
+			break;
+		case 5:
+			$r = 'Нагорье';
+			break;
+		case 6:
+			$r = 'Залив';
+			break;
+		case 7:
+			$r = 'Болото';
+			break;
+		case 8:
+			$r = 'Пещера';
+			break;
+	}
+	return $r;
+}
+
 function enemyname($u){
 	$p = '';
 	$p .= '<b>'.$u['charenemyname'].'</b><br/>';
@@ -137,8 +174,20 @@ function add_event_msg($msg) {
 	$db->query('INSERT INTO '.$db->prefix.'recent_incidents (message) VALUES (\''.$msg.'\')') or error('Unable to add message', __FILE__, __LINE__, $db->error());
 }
 
+function add_new_level_msg($name, $level) {
+	switch(rand(1, 1)) {
+		case 1:
+			if ($gender == 0)
+				$r = '<b>'.$name.'</b> поднялся на <b>'.$level.'</b> уровень!';
+			else
+				$r = '<b>'.$name.'</b> поднялась на <b>'.$level.'</b> уровень!';
+			break;
+	}
+	add_event_msg($r);
+}
+
 function add_death_msg($name, $gender, $location) {
-	switch(rand(1, 2)) {
+	switch(rand(1, 3)) {
 		case 1:
 			if ($gender == 0)
 				$r = '<b>'.$name.'</b> умер в локации <b>'.$location.'</b>.';
@@ -162,10 +211,20 @@ function add_death_msg($name, $gender, $location) {
 }
 
 function add_reg_msg($name, $gender) {
-	if ($gender == 0)
-		$r = 'Новый герой <b>'.$name.'</b> пришел в <b>Эльвион</b>.';
-	else
-		$r = 'Новая героиня <b>'.$name.'</b> пришла в <b>Эльвион</b>.';
+	switch(rand(1, 2)) {
+		case 1:
+			if ($gender == 0)
+				$r = 'Новый герой <b>'.$name.'</b> пришел в <b>Эльвион</b>.';
+			else
+				$r = 'Новая героиня <b>'.$name.'</b> пришла в <b>Эльвион</b>.';
+			break;
+		case 2:
+			if ($gender == 0)
+				$r = 'Новый герой <b>'.$name.'</b> прибыл в <b>Эльвион</b>.';
+			else
+				$r = 'Новая героиня <b>'.$name.'</b> прибыла в <b>Эльвион</b>.';
+			break;
+	}
 	add_event_msg($r);
 }
 
