@@ -12,6 +12,7 @@ function generate_library_menu($page = ''){
 			<div class="inbox">
 				<ul>
 					<li<?php if ($page == 'index') echo ' class="isactive"'; ?>><a href="library_index.php">Игровой процесс</a></li>
+					<li<?php if ($page == 'locations') echo ' class="isactive"'; ?>><a href="library_locations.php">Игровые локации</a></li>
 					<li<?php if ($page == 'exptable') echo ' class="isactive"'; ?>><a href="library_exptable.php">Таблица опыта</a></li>
 				</ul>
 			</div>
