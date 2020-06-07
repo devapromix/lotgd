@@ -307,7 +307,7 @@ ob_start();
 		<div class="box">
 			<div class="inform">
 				<fieldset>
-					<legend><?php echo 'Кричащий Бегун <small>Птица 1 уровня</small>'; ?></legend>
+					<legend><?php echo $pun_user['charenemyname'].' <small>'.enemytype($pun_user['charenemytype']).' '.$pun_user['charenemylevel'].' уровня</small>'; ?></legend>
 					<div class="infldset">
 						<p><?php echo $hasfight; ?></p>
 					</div>
