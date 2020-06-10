@@ -123,6 +123,7 @@ if (($dir == 'revive') && (!hashp())) {
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charx='.$pun_user['charx'].',chary='.$pun_user['chary'].' WHERE id='.$pun_user['id']) or error('EN:5178453451', __FILE__, __LINE__, $db->error());	
 	redirect('game_index.php', 'Ты был воскрешен!');
 }
+
 // Отдых в таверне
 $hasrestininn = '';
 if (($dir == 'restininn') && (hasrestininn())) {
@@ -134,23 +135,43 @@ if (($dir == 'restininn') && (hasrestininn())) {
 
 // Отдых
 $hasrest = '';
+$hasrestmsglev = 0;
 if (($dir == 'rest') && (hasrest())) {
-	// Отдых - 90%
-	if (rand(0,100) <= 10) {
-		$hasrest .= 'Вы чувствуете себя отдохнувшим и полным сил.'.'<br/>';
-		$pun_user['charhp'] = $pun_user['charmaxhp'];
-	// Нападение на Героя во время отдыха - 10%
-	} else
-		$dir = 'fight';
+	$gr = false;
+	// Отдых на кладбище - успех 20%
+	if (hasproperties($cur_loc['properties'], 'G')) {
+		$gr = true;
+		if (rand(0,100) >= 80) {
+			$hasrest .= 'Вы отдохнули среди мертвых и набрались сил.'.'<br/>';
+			$pun_user['charhp'] = $pun_user['charmaxhp'];		
+		} else {
+			// Нападение нежити на Героя во время отдыха на кладбище
+			$dir = 'fight';
+			$hasrestmsglev = 1;
+		}
+	}
+	// Отдых - успех 90%
+	if (!$gr) {
+		if (rand(0,100) >= 10) {
+			$hasrest .= 'Вы чувствуете себя отдохнувшим и полным сил.'.'<br/>';
+			$pun_user['charhp'] = $pun_user['charmaxhp'];
+		} else {
+			// Нападение вора на Героя во время отдыха
+			$dir = 'fight';
+			$hasrestmsglev = 2;
+		}
+	}
 	$pun_user['charfood']--;
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',charfood='.$pun_user['charfood'].' WHERE id='.$pun_user['id']) or error('EN:6935597915', __FILE__, __LINE__, $db->error());
 }
 
 // Бой
 $hasfight = '';
-if (($dir == 'fight') && hasfight()) {
+if (($dir == 'fight') && (hasfight() || hasproperties($cur_loc['properties'], 'R'))) {
+	
 	$dam = 12;
 	$pun_user['charhp'] = $pun_user['charhp'] - $dam;
+	
 	// Поражение
 	if ($pun_user['charhp'] <= 0) {
 		$hasfight .= 'Ты погиб!'.'<br/>';
@@ -171,6 +192,8 @@ if (($dir == 'fight') && hasfight()) {
 		$exp = rand(15, 25);
 		$hasfight .= 'Опыт +'.$exp.'<br/>';
 		$pun_user['charexp'] = $pun_user['charexp'] + $exp;
+		// Ген. нового врага
+		
 	}
 	
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',chargold='.$pun_user['chargold'].',charexp='.$pun_user['charexp'].' WHERE id='.$pun_user['id']) or error('EN:2390144337', __FILE__, __LINE__, $db->error());	
@@ -303,7 +326,7 @@ ob_start();
 	
 	<?php if ($hasfight != '') { ?>
 	<div class="blockform">
-		<h2><span><?php echo 'Поединок'; ?></span></h2>
+		<h2><span><?php echo get_fight_msg($hasrestmsglev); ?></span></h2>
 		<div class="box">
 			<div class="inform">
 				<fieldset>

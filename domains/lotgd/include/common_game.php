@@ -64,7 +64,7 @@ function enemyareal($location_type) {
 	return $r;
 }
 
-function enemyname($u){
+function enemyname($u) {
 	$p = '';
 	$p .= '<b>'.$u['charenemyname'].'</b><br/>';
 	$p .= '<small>';
@@ -74,11 +74,7 @@ function enemyname($u){
 	return $p;
 }
 
-function genenemy($location_type) {
-	
-}
-
-function charactermaxexp($level){
+function charactermaxexp($level) {
 	return $level * 250;
 }
 
@@ -106,7 +102,7 @@ function hasproperties($properties, $f) {
 		return true;
 }
 
-function charmenu($menutitle, $linktitle, $link){
+function charmenu($menutitle, $linktitle, $link) {
 	$p = '';
 	$p .= '<h2 class="block2"><span>'.$menutitle.'</span></h2>';
 	$p .= '<div class="box">';
@@ -119,7 +115,7 @@ function charmenu($menutitle, $linktitle, $link){
 	return $p;
 }
 
-function charinfo($pun_user){
+function charinfo($pun_user) {
 	$p = '';
 	$p .= '<span data-toggle="tooltip" title="'.characterracename($pun_user).' '.characterclassname($pun_user).' '.$pun_user['charlevel'].' уровня">'.$pun_user['charname'].' </span>';
 	$p .= '<span data-toggle="tooltip" title="Опыт '. $pun_user['charexp'].'/'.charactermaxexp($pun_user['charlevel']).'"><img alt="Опыт" src="img/game/charexp.png"> '.$pun_user['charexp'].' </span>';
@@ -129,7 +125,7 @@ function charinfo($pun_user){
 	return $p;
 }
 
-function characterbox($u){
+function characterbox($u) {
 	$p = '';
 	if (!$u['is_guest'])
 		$p .= '<h2><span>Персонаж</span></h2>';
@@ -150,11 +146,25 @@ function characterbox($u){
 	return $p;
 }
 
-function percent($allvalue, $percent){
+function percent($allvalue, $percent) {
 	return floor(($allvalue * $percent) / 100);
 }
 
-function events(){
+function get_fight_msg($level) {
+	switch($level) {
+		case 1:
+			return 'Нападение нежити';
+			break;
+		case 2:
+			return 'Попытка ограбления';
+			break;
+		default:
+			return 'Поединок';
+			break;
+	}
+}
+
+function events() {
 	global $db, $recent_inc;
 	$p = '';
 	$msgs = $db->query('SELECT * FROM '.$db->prefix.'recent_incidents ORDER BY id DESC LIMIT '.$recent_inc) or error('EN:2479345682', __FILE__, __LINE__, $db->error());
