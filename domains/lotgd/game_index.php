@@ -67,6 +67,16 @@ if (($dir == 'south') && ($south_loc['name'] != '') && hashp()) {
 
 $healhp = $pun_user['charmaxhp'] - $pun_user['charhp'];
 
+// Ген. нового врага
+function gen_new_rand_enemy($areal) {
+	global $db, $pun_user;
+	$rmob = $db->query('SELECT * FROM '.$db->prefix.'mobs WHERE areal='.$areal.' AND level<='.$pun_user['charlevel'].' order by rand() limit 1') or error('EN:7713504421', __FILE__, __LINE__, $db->error());
+	$mob = $db->fetch_assoc($rmob);	
+	
+	$pun_user['charenemyname'] = $mob['name'];
+	$db->query('UPDATE '.$db->prefix.'users SET charenemy='.$mob['id'].',charenemyname="'.$mob['name'].'",charenemytype='.$mob['type'].' WHERE id='.$pun_user['id']) or error('EN:7925487912', __FILE__, __LINE__, $db->error());
+}
+
 function ininn() {
 	global $cur_loc;
 	return hasproperties($cur_loc['properties'], 'I');
@@ -97,7 +107,6 @@ function hasrest() {
 	return (hasproperties($cur_loc['properties'], 'R') && ($pun_user['charfood'] > 0) && hashp());
 }
 
-
 if (($dir == 'heal') && (hasheal()) && (hashp())) {
 	if ($healhp > 0) {
 		$db->query('UPDATE '.$db->prefix.'users SET charhp='.($pun_user['charmaxhp']).',chargold='.($pun_user['chargold'] - $healhp).' WHERE id='.$pun_user['id']) or error('EN:4181567392', __FILE__, __LINE__, $db->error());
@@ -124,7 +133,7 @@ if (($dir == 'revive') && (!hashp())) {
 	redirect('game_index.php', 'Ты был воскрешен!');
 }
 
-// Отдых в таверне
+// Отдых в Таверне
 $hasrestininn = '';
 if (($dir == 'restininn') && (hasrestininn())) {
 	$hasrestininn .= 'Вы чувствуете себя отдохнувшим и полным сил.'.'<br/>';
@@ -148,17 +157,19 @@ if (($dir == 'rest') && (hasrest())) {
 			// Нападение нежити на Героя во время отдыха на кладбище
 			$dir = 'fight';
 			$hasrestmsglev = 1;
+			gen_new_rand_enemy(0);
 		}
 	}
 	// Отдых - успех 90%
 	if (!$gr) {
-		if (rand(0,100) >= 10) {
+		if (rand(0,100) >= 80) {
 			$hasrest .= 'Вы чувствуете себя отдохнувшим и полным сил.'.'<br/>';
 			$pun_user['charhp'] = $pun_user['charmaxhp'];
 		} else {
 			// Нападение вора на Героя во время отдыха
 			$dir = 'fight';
 			$hasrestmsglev = 2;
+			gen_new_rand_enemy(-1);
 		}
 	}
 	$pun_user['charfood']--;
@@ -168,10 +179,9 @@ if (($dir == 'rest') && (hasrest())) {
 // Бой
 $hasfight = '';
 if (($dir == 'fight') && (hasfight() || hasproperties($cur_loc['properties'], 'R'))) {
-	
 	$dam = 12;
 	$pun_user['charhp'] = $pun_user['charhp'] - $dam;
-	
+
 	// Поражение
 	if ($pun_user['charhp'] <= 0) {
 		$hasfight .= 'Ты погиб!'.'<br/>';
@@ -192,13 +202,11 @@ if (($dir == 'fight') && (hasfight() || hasproperties($cur_loc['properties'], 'R
 		$exp = rand(15, 25);
 		$hasfight .= 'Опыт +'.$exp.'<br/>';
 		$pun_user['charexp'] = $pun_user['charexp'] + $exp;
-		// Ген. нового врага
-		
 	}
-	
+
+//	gen_new_rand_enemy(1);
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',chargold='.$pun_user['chargold'].',charexp='.$pun_user['charexp'].' WHERE id='.$pun_user['id']) or error('EN:2390144337', __FILE__, __LINE__, $db->error());	
 }
-
 
 ob_start();
 
