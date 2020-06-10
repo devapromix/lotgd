@@ -68,12 +68,16 @@ if (($dir == 'south') && ($south_loc['name'] != '') && hashp()) {
 $healhp = $pun_user['charmaxhp'] - $pun_user['charhp'];
 
 // Ген. нового врага
+$fightenemy = '';
 function gen_new_rand_enemy($areal) {
 	global $db, $pun_user;
 	$rmob = $db->query('SELECT * FROM '.$db->prefix.'mobs WHERE areal='.$areal.' AND level<='.$pun_user['charlevel'].' order by rand() limit 1') or error('EN:7713504421', __FILE__, __LINE__, $db->error());
 	$mob = $db->fetch_assoc($rmob);	
 	
+	$pun_user['charenemy'] = $mob['id'];
 	$pun_user['charenemyname'] = $mob['name'];
+	$pun_user['charenemytype'] = $mob['type'];
+	$pun_user['charenemylevel'] = $mob['level'];
 	$db->query('UPDATE '.$db->prefix.'users SET charenemy='.$mob['id'].',charenemyname="'.$mob['name'].'",charenemytype='.$mob['type'].' WHERE id='.$pun_user['id']) or error('EN:7925487912', __FILE__, __LINE__, $db->error());
 }
 
@@ -158,6 +162,7 @@ if (($dir == 'rest') && (hasrest())) {
 			$dir = 'fight';
 			$hasrestmsglev = 1;
 			gen_new_rand_enemy(0);
+			$fightenemy = $pun_user['charenemyname'].' <small>'.enemytype($pun_user['charenemytype']).' '.$pun_user['charenemylevel'].' уровня</small>';
 		}
 	}
 	// Отдых - успех 90%
@@ -170,6 +175,7 @@ if (($dir == 'rest') && (hasrest())) {
 			$dir = 'fight';
 			$hasrestmsglev = 2;
 			gen_new_rand_enemy(-1);
+			$fightenemy = $pun_user['charenemyname'].' <small>'.enemytype($pun_user['charenemytype']).' '.$pun_user['charenemylevel'].' уровня</small>';
 		}
 	}
 	$pun_user['charfood']--;
@@ -204,7 +210,8 @@ if (($dir == 'fight') && (hasfight() || hasproperties($cur_loc['properties'], 'R
 		$pun_user['charexp'] = $pun_user['charexp'] + $exp;
 	}
 
-//	gen_new_rand_enemy(1);
+	$fightenemy = $pun_user['charenemyname'].' <small>'.enemytype($pun_user['charenemytype']).' '.$pun_user['charenemylevel'].' уровня</small>';
+	gen_new_rand_enemy(1);
 	$db->query('UPDATE '.$db->prefix.'users SET charhp='.$pun_user['charhp'].',chargold='.$pun_user['chargold'].',charexp='.$pun_user['charexp'].' WHERE id='.$pun_user['id']) or error('EN:2390144337', __FILE__, __LINE__, $db->error());	
 }
 
@@ -338,7 +345,7 @@ ob_start();
 		<div class="box">
 			<div class="inform">
 				<fieldset>
-					<legend><?php echo $pun_user['charenemyname'].' <small>'.enemytype($pun_user['charenemytype']).' '.$pun_user['charenemylevel'].' уровня</small>'; ?></legend>
+					<legend><?php echo $fightenemy; ?></legend>
 					<div class="infldset">
 						<p><?php echo $hasfight; ?></p>
 					</div>
@@ -346,7 +353,9 @@ ob_start();
 			</div>
 		</div>
 	</div>
-	<?php } ?>
+	<?php 	
+	} 
+	?>
 	
 	<?php if ($hasrest != '') { ?>
 	<div class="blockform">
