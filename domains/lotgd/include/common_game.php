@@ -185,12 +185,24 @@ function add_event_msg($msg) {
 }
 
 function add_new_level_msg($name, $level) {
-	switch(rand(1, 1)) {
+	switch(rand(1, 3)) {
 		case 1:
 			if ($gender == 0)
 				$r = '<b>'.$name.'</b> поднялся на <b>'.$level.'</b> уровень!';
 			else
 				$r = '<b>'.$name.'</b> поднялась на <b>'.$level.'</b> уровень!';
+			break;
+		case 2:
+			if ($gender == 0)
+				$r = '<b>'.$name.'</b> получил <b>'.$level.'</b> уровень!';
+			else
+				$r = '<b>'.$name.'</b> получила на <b>'.$level.'</b> уровень!';
+			break;
+		case 3:
+			if ($gender == 0)
+				$r = '<b>'.$name.'</b> теперь на <b>'.$level.'</b> уровне!';
+			else
+				$r = '<b>'.$name.'</b> теперь на <b>'.$level.'</b> уровне!';
 			break;
 	}
 	add_event_msg($r);
