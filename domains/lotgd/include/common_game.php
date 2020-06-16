@@ -233,7 +233,7 @@ function add_death_msg($name, $gender, $location) {
 }
 
 function add_reg_msg($name, $gender) {
-	switch(rand(1, 2)) {
+	switch(rand(1, 4)) {
 		case 1:
 			if ($gender == 0)
 				$r = 'Новый герой <b>'.$name.'</b> пришел в <b>Эльвион</b>.';
@@ -241,6 +241,18 @@ function add_reg_msg($name, $gender) {
 				$r = 'Новая героиня <b>'.$name.'</b> пришла в <b>Эльвион</b>.';
 			break;
 		case 2:
+			if ($gender == 0)
+				$r = 'Новый герой <b>'.$name.'</b> приехал в <b>Эльвион</b>.';
+			else
+				$r = 'Новая героиня <b>'.$name.'</b> приехала в <b>Эльвион</b>.';
+			break;
+		case 3:
+			if ($gender == 0)
+				$r = 'Новый герой <b>'.$name.'</b> приплыл в <b>Эльвион</b>.';
+			else
+				$r = 'Новая героиня <b>'.$name.'</b> приплыла в <b>Эльвион</b>.';
+			break;
+		case 4:
 			if ($gender == 0)
 				$r = 'Новый герой <b>'.$name.'</b> прибыл в <b>Эльвион</b>.';
 			else
