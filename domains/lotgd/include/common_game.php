@@ -80,18 +80,26 @@ function charactermaxexp($level) {
 
 function characterracename($u) {
 	$raceid = $u['charrace'];
-	if ($raceid == 0)
-		return 'Эльф';
-	else
-		return '?';
+	switch($raceid) {
+		case 0:
+			return 'Эльф';
+			break;
+		default:
+			return '?';
+			break;
+	}
 }
 
 function characterclassname($u) {
 	$classid = $u['charclass'];
-	if ($classid == 0)
-		return 'Воин';
-	else
-		return '?';
+	switch($classid) {
+		case 0:
+			return 'Воин';
+			break;
+		default:
+			return '?';
+			break;
+	}
 }
 
 function hasproperties($properties, $f) {
