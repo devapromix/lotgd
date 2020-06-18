@@ -91,10 +91,15 @@ function characterracename($u) {
 }
 
 function characterclassname($u) {
+	$raceid = $u['charrace'];
 	$classid = $u['charclass'];
 	switch($classid) {
-		case 0:
-			return 'Воин';
+		case 0: // Боец ближнего боя
+			switch($raceid) {
+				case 0:
+					return 'Воин';
+					break;
+			}
 			break;
 		default:
 			return '?';
