@@ -32,11 +32,11 @@ generate_library_menu('index');
 			</div>
 			<legend>Отдых</legend>
 			<div class="inbox">
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<p>О некоторых локациях можно отдыхать и восстанавливать здоровье, если есть запас провизии. Во время отдыха есть вероятность, что на героя нападет вор.</p>
 			</div>
 			<legend>Лечение</legend>
 			<div class="inbox">
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<p>В любом городе или Домике Целителя Герой за определенную плату может частично или полностью восстановить здоровье.</p>
 			</div>
 
 		</div>
