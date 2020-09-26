@@ -6,7 +6,7 @@ require PUN_ROOT.'include/common_game.php';
 require PUN_ROOT.'include/common_library.php';
 
 
-$page_title = 'Об игре / Библиотека / Край Серого Дракона';
+$page_title = 'Игровой процесс / Библиотека / Край Серого Дракона';
 define('PUN_ACTIVE_PAGE', 'admin');
 require PUN_ROOT.'header.php';
 

@@ -14,6 +14,7 @@ function generate_library_menu($page = ''){
 					<li<?php if ($page == 'index') echo ' class="isactive"'; ?>><a href="library_index.php">Игровой процесс</a></li>
 					<li<?php if ($page == 'locations') echo ' class="isactive"'; ?>><a href="library_locations.php">Игровые локации</a></li>
 					<li<?php if ($page == 'exptable') echo ' class="isactive"'; ?>><a href="library_exptable.php">Таблица опыта</a></li>
+					<li<?php if ($page == 'about') echo ' class="isactive"'; ?>><a href="library_about.php">Об игре</a></li>
 				</ul>
 			</div>
 		</div>	
