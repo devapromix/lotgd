@@ -78,7 +78,7 @@ function gen_new_rand_enemy($areal) {
 	$pun_user['charenemyname'] = $mob['name'];
 	$pun_user['charenemytype'] = $mob['type'];
 	$pun_user['charenemylevel'] = $mob['level'];
-	$db->query('UPDATE '.$db->prefix.'users SET charenemy='.$mob['id'].',charenemyname="'.$mob['name'].'",charenemytype='.$mob['type'].' WHERE id='.$pun_user['id']) or error('EN:7925487912', __FILE__, __LINE__, $db->error());
+	$db->query('UPDATE '.$db->prefix.'users SET charenemy='.$mob['id'].',charenemyname="'.$mob['name'].'",charenemytype='.$mob['type'].' WHERE id='.$pun_user['id']) or error('EN:3925422912', __FILE__, __LINE__, $db->error());
 }
 
 function ininn() {

@@ -15,6 +15,7 @@ function generate_game_admin_menu($page = '') {
 			<ul>
 				<li<?php if ($page == 'stat') echo ' class="isactive"'; ?>><a href="game_admin_index.php">Статистика</a></li>
 				<li<?php if ($page == 'mobs') echo ' class="isactive"'; ?>><a href="game_admin_mobs.php">Бестиарий</a></li>
+				<li<?php if ($page == 'hero') echo ' class="isactive"'; ?>><a href="game_admin_hero.php">Герой</a></li>
 			</ul>
 		</div>
 	</div>
